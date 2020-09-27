@@ -118,4 +118,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/showMe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_overlay">
+
+        <ImageView
+            android:id="@+id/myQrCode"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_centerInParent="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/backgroundmain" />
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="17dp"
+            android:scaleType="fitXY"
+            android:tint="@color/white"
+            android:src="@drawable/ic_baseline_close_24" />
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

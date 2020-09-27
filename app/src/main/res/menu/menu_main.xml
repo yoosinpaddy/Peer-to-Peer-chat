@@ -10,4 +10,10 @@
         android:id="@+id/action_history"
         android:title="Save Chat history"
         app:showAsAction="never"></item>
+    <item
+        android:id="@+id/action_QR"
+        android:iconTint="@color/white"
+        android:icon="@drawable/ic_qr"
+        android:title="Show QR Code"
+        app:showAsAction="ifRoom"></item>
 </menu>

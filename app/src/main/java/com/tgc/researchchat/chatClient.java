@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,8 +41,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.google.zxing.BarcodeFormat;
 import com.hbisoft.pickit.PickiT;
 import com.hbisoft.pickit.PickiTCallbacks;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -79,6 +83,9 @@ public class chatClient extends AppCompatActivity implements PickiTCallbacks {
     private RecyclerView mMessageRecycler;
     private ChatAdapterRecycler mMessageAdapter;
     private int REQUEST_CODE = 200;
+    View showMe;
+    ImageView myQrCode;
+    ImageView close;
 
 
     @SuppressLint("CutPasteId")
@@ -87,6 +94,12 @@ public class chatClient extends AppCompatActivity implements PickiTCallbacks {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatbox);
 
+        showMe = findViewById(R.id.showMe);
+        myQrCode = findViewById(R.id.myQrCode);
+
+        generateMyQR();
+
+        close = findViewById(R.id.close);
         pickiT = new PickiT(this, this);
         smessage = findViewById(R.id.edittext_chatbox);
         toolbar = findViewById(R.id.toolbar);
@@ -149,6 +162,12 @@ public class chatClient extends AppCompatActivity implements PickiTCallbacks {
             intent.setType("*/*");
             startActivityForResult(Intent.createChooser(intent, "Select file"), 1);
         });
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showMe.setVisibility(View.GONE);
+            }
+        });
 
 
     }
@@ -210,9 +229,26 @@ public class chatClient extends AppCompatActivity implements PickiTCallbacks {
                 }
             }
         }
+        if (item.getItemId()==R.id.action_QR){
+            generateMyQR();
+            showMe.setVisibility(View.VISIBLE);
+        }
         return super.onOptionsItemSelected(item);
     }
 
+    private void generateMyQR() {
+        String myiP = "" ;
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        myiP = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+
+        try {
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            Bitmap bitmap = barcodeEncoder.encodeBitmap(myiP, BarcodeFormat.QR_CODE, 400, 400);
+            myQrCode.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     private boolean permissionAlreadyGranted() {
         int result = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
